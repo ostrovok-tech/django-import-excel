@@ -13,6 +13,10 @@ import datetime
 def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel/import_excel.html', with_good=True):
     comment_initial = {'comment': 'Imported %s' % datetime.datetime.now()}
     form = FormClass(data=request.POST or None, files=request.FILES or None, initial=comment_initial)
+    form_class_name = FormClass.__name__
+    extra_context = {
+        'form': form, 'form_class_name': form_class_name, 'with_good': with_good,
+    }
     if form.is_valid():
         cleaned_data = form.cleaned_data
         try:
@@ -32,8 +36,5 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
             form = FormClass(initial=initial)
             form.fields['is_good'].widget = forms.CheckboxInput()
             form.fields['excel_file'].widget = forms.HiddenInput()
-    form_class_name = FormClass.__name__
-    extra_context = {
-        'form': form, 'form_class_name': form_class_name, 'with_good': with_good,
-    }
+            extra_context['converted_data'] = converted_data
     return direct_to_template(request, template_name, extra_context)
