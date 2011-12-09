@@ -2,6 +2,7 @@
 from django import forms
 from django.forms.util import ErrorList
 from django.utils import simplejson
+from django.utils.datastructures import SortedDict
 import xlrd
 
 
@@ -42,7 +43,7 @@ class ImportExcelForm(forms.Form):
         for rx in range(1, sheet.nrows):
             row = sheet.row(rx)
             values = map(lambda cell: cell.value, row)
-            hotel_data = dict(zip(fields, values))
+            hotel_data = SortedDict(zip(fields, values))
             converted_data.append(hotel_data)
         return converted_data
 
