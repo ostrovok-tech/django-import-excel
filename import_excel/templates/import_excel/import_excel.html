@@ -10,7 +10,7 @@
 
 <h1>Load data from EXCEL: {{ form_class_name }}</h1>
 
-<form action="" method="POST">{% csrf_token %}
+<form action="" method="POST" enctype="multipart/form-data"{# <-Required enctype #}>{% csrf_token %}
 	<table>
 		{{ form }}
 		<tr>
