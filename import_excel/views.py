@@ -10,7 +10,7 @@ from forms import ImportExcelForm
 import datetime
 
 
-def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel/import_excel.html', with_good=True):
+def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel/import_excel.html', with_good=True, next_url='.'):
     comment_initial = {'comment': 'Imported %s' % datetime.datetime.now()}
     form = FormClass(data=request.POST or None, files=request.FILES or None, initial=comment_initial)
     form_class_name = FormClass.__name__
@@ -26,7 +26,7 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
             if not with_good or form.cleaned_data['is_good']:
                 form.update_callback(request, converted_data)
                 messages.success(request, 'Excel Data is succefully imported')
-                next_url = request.GET.get('next', '.')
+                next_url = request.GET.get('next', next_url) or '.'
                 return redirect(next_url)
             initial = MergeDict(comment_initial, {
                 'converted_data': simplejson.dumps(converted_data),
