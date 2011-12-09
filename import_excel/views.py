@@ -10,7 +10,7 @@ from forms import ImportExcelForm
 import datetime
 
 
-def import_excel(request, FormClass=ImportExcelForm, with_good=True):
+def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel/import_excel.html', with_good=True):
     comment_initial = {'comment': 'Imported %s' % datetime.datetime.now()}
     form = FormClass(request.POST or None, initial=comment_initial)
     if form.is_valid():
@@ -32,6 +32,6 @@ def import_excel(request, FormClass=ImportExcelForm, with_good=True):
             form = FormClass(initial=initial)
             form.fields['is_good'].widget = forms.CheckboxInput()
             form.fields['excel_file'].widget = forms.HiddenInput()
-    template_name = 'import_excel/import_excel.html'
-    extra_context = {'form': form}
+    form_class_name = FormClass.__name__
+    extra_context = {'form': form, 'form_class_name': form_class_name}
     return direct_to_template(request, template_name, extra_context)

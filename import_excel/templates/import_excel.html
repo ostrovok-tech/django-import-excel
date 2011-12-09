@@ -1,0 +1,27 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Load data from EXCEL: {{ form_class_name }}</TITLE>
+
+</HEAD>
+
+<BODY>
+
+<h1>Load data from EXCEL: {{ form_class_name }}</h1>
+
+<form action="" method="POST">{% csrf_token %}
+	<table>
+		{{ form }}
+		<tr>
+			<th/>
+			<td>
+				<input type="submit" value="Load data" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+</BODY>
+
+</HTML> 
