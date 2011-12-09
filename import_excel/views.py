@@ -22,7 +22,7 @@ def import_excel(request, FormClass=ImportExcelForm, with_good=True):
             form.errors['excel_file'] = ErrorList([error_message])
         else:
             if not with_good or form.cleaned_data['is_good']:
-                form.update_hotels(request, converted_data)
+                form.update_callback(request, converted_data)
                 messages.success(request, 'Excel Data is succefully imported')
                 next_url = request.GET.get('next', '.')
                 return redirect(next_url)

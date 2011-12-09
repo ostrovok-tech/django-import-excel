@@ -25,7 +25,7 @@ class ImportExcelForm(forms.Form):
     def clean(self):
         cleaned_data = self.cleaned_data
         if not cleaned_data.get('excel_file') and not cleaned_data.get('converted_data'):
-            self.errors['excel_file'] = ErrorList([u'Обязательное поле'])
+            self.errors['excel_file'] = ErrorList([u'Required Field'])
         return cleaned_data
 
     def get_converted_data(self, data):
@@ -46,3 +46,5 @@ class ImportExcelForm(forms.Form):
             converted_data.append(hotel_data)
         return converted_data
 
+    def update_callback(self, request, converted_data):
+        raise NotImplementedError
