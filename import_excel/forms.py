@@ -42,6 +42,8 @@ class ImportExcelForm(forms.Form):
         converted_data = []
         for rx in range(1, sheet.nrows):
             row = sheet.row(rx)
+            if not row:
+                continue
             values = map(lambda cell: cell.value, row)
             hotel_data = SortedDict(zip(fields, values))
             converted_data.append(hotel_data)
