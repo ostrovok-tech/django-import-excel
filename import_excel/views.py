@@ -30,7 +30,7 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
                 return redirect(next_url)
             initial = MergeDict(comment_initial, {
                 'converted_data': simplejson.dumps(converted_data),
-            })
+            }, cleaned_data)
             form = FormClass(initial=initial)
             form.fields['is_good'].widget = forms.CheckboxInput()
             form.fields['excel_file'].widget = forms.HiddenInput()
