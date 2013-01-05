@@ -1,8 +1,7 @@
-#coding:utf-8
+# coding:utf-8
 from django import forms
 from django.forms.util import ErrorList
 from django.utils import simplejson
-from django.utils.datastructures import SortedDict
 import xlrd
 
 
@@ -37,16 +36,13 @@ class ImportExcelForm(forms.Form):
             file_contents=excel_file.read(), encoding_override='utf-8'
         )
         sheet = book.sheet_by_index(0)
-        first_row = sheet.row(0)
-        fields = map(lambda cell: cell.value, first_row)
         converted_data = []
-        for rx in range(1, sheet.nrows):
+        for rx in range(sheet.nrows):
             row = sheet.row(rx)
             if not row:
                 continue
             values = map(lambda cell: cell.value, row)
-            hotel_data = SortedDict(zip(fields, values))
-            converted_data.append(hotel_data)
+            converted_data.append(values)
         return converted_data
 
     def update_callback(self, request, converted_data):
