@@ -8,42 +8,42 @@ import xlrd
 class ImportExcelForm(forms.Form):
 
     excel_file = forms.FileField(required=False)
-    converted_data = forms.CharField(widget=forms.HiddenInput, required=False)
+    converted_items = forms.CharField(widget=forms.HiddenInput, required=False)
     comment = forms.CharField(required=False)
     is_good = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
-    def clean_converted_data(self):
-        converted_data = self.cleaned_data['converted_data']
-        if not converted_data:
+    def clean_converted_items(self):
+        converted_items = self.cleaned_data['converted_items']
+        if not converted_items:
             return None
         try:
-            converted_data = simplejson.loads(converted_data)
+            converted_items = simplejson.loads(converted_items)
         except ValueError:
             raise forms.ValidationError(u'Bad converted data')
-        return converted_data
+        return converted_items
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if not cleaned_data.get('excel_file') and not cleaned_data.get('converted_data'):
+        if not cleaned_data.get('excel_file') and not cleaned_data.get('converted_items'):
             self.errors['excel_file'] = ErrorList([u'Required Field'])
         return cleaned_data
 
-    def get_converted_data(self, data):
-        if data['converted_data']:
-            return data['converted_data']
+    def get_converted_items(self, data):
+        if data['converted_items']:
+            return data['converted_items']
         excel_file = data['excel_file']
         book = xlrd.open_workbook(
             file_contents=excel_file.read(), encoding_override='utf-8'
         )
         sheet = book.sheet_by_index(0)
-        converted_data = []
+        converted_items = []
         for rx in range(sheet.nrows):
             row = sheet.row(rx)
             if not row:
                 continue
             values = map(lambda cell: cell.value, row)
-            converted_data.append(values)
-        return converted_data
+            converted_items.append(values)
+        return converted_items
 
-    def update_callback(self, request, converted_data):
+    def update_callback(self, request, converted_items):
         raise NotImplementedError
