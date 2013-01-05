@@ -33,6 +33,7 @@ Excel File::
 
 Form::
 
+    from import_excel.forms import ImportExcelForm
     class BookImportForm(ImportExcelForm):
         @transaction.autocommit
         def update_callback(self, request, converted_items):
