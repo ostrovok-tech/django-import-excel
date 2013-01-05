@@ -1,6 +1,7 @@
 # coding:utf-8
 from django import forms
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.forms.util import ErrorList
 from django.shortcuts import redirect
 from django.utils import simplejson
@@ -24,7 +25,11 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
             form.errors['excel_file'] = ErrorList([error_message])
         else:
             if not with_good or form.cleaned_data['is_good']:
-                form.update_callback(request, converted_items)
+                try:
+                    form.update_callback(request, converted_items)
+                except ValidationError, e:
+                    error_message = u'Validation error from excel: %s' % unicode(e)
+                    form.errors['excel_file'] = ErrorList([error_message])
                 messages.success(request, 'Excel Data is succefully imported')
                 next_url = request.GET.get('next', next_url) or '.'
                 return redirect(next_url)
