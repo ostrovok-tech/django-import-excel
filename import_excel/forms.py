@@ -1,8 +1,8 @@
 #coding:utf-8
 from django import forms
 from django.forms.util import ErrorList
-from django.utils import simplejson
 from django.utils.datastructures import SortedDict
+import json
 import xlrd
 
 
@@ -18,7 +18,7 @@ class ImportExcelForm(forms.Form):
         if not converted_data:
             return None
         try:
-            converted_data = simplejson.loads(converted_data)
+            converted_data = json.loads(converted_data)
         except ValueError:
             raise forms.ValidationError(u'Bad converted data')
         return converted_data

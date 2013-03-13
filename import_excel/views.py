@@ -2,10 +2,8 @@
 from django import forms
 from django.contrib import messages
 from django.forms.util import ErrorList
-from django.shortcuts import redirect
-from django.utils import simplejson
+from django.shortcuts import redirect, render
 from django.utils.datastructures import MergeDict
-from django.views.generic.simple import direct_to_template
 from forms import ImportExcelForm
 import datetime
 
@@ -29,7 +27,7 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
                 next_url = request.GET.get('next', next_url) or '.'
                 return redirect(next_url)
             initial = MergeDict(comment_initial, {
-                'converted_data': simplejson.dumps(converted_data),
+                'converted_data': json.dumps(converted_data),
             }, cleaned_data)
             form = FormClass(initial=initial)
             form.fields['is_good'].widget = forms.CheckboxInput()
@@ -38,4 +36,4 @@ def import_excel(request, FormClass=ImportExcelForm, template_name='import_excel
     extra_context.update({
         'form': form, 'form_class_name': form_class_name, 'with_good': with_good,
     })
-    return direct_to_template(request, template_name, extra_context)
+    return render(request, template_name, extra_context)
